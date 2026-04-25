@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Users" %>
+
+<div class="card">
+  <div class="card-header">USERS <span class="badge text-bg-secondary"><%= @users.count %></span>
+    <a class="btn btn-success btn-sm float-end" href="<%= new_user_path %>" role="button">Create New User</a></div>
+  <div class="card-body">
+    <ol class="list-group list-group-numbered" id="users">
+      <% @users.each do |user| %>
+        <%= render user %>
+      <% end %>
+      
+    </ol>
+  </div>
+</div>

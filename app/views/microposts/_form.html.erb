@@ -1,0 +1,35 @@
+
+
+
+<% if micropost.errors.any? %>
+<div class="alert alert-danger" role="alert">
+  <h2><%= pluralize(micropost.errors.count, "error") %> prohibited this micropost from being saved:</h2>
+
+  <ul>
+    <% micropost.errors.each do |error| %>
+      <li><%= error.full_message %></li>
+    <% end %>
+  </ul>
+</div>
+
+<% end %>
+
+
+
+
+<%= form_for :micropost do |f| %>
+
+  <div class="input-group flex-nowrap">
+    <span class="input-group-text">Context</span>
+    <%= f.text_field :context,class:"form-control" %>
+  </div>
+  <div class="input-group flex-nowrap top-pad">
+    <span class="input-group-text">Select User</span>
+    <%= f.select :user_id, options_for_select(@user_options,:selected=>@micropost.user_id),{}, {:class => 'form-control'} %>
+  </div>
+ 
+  <br>
+  <div class="text-center">
+    <button role="button" type="submit" class="btn btn-primary">Create</button>
+  </div>
+<% end %>

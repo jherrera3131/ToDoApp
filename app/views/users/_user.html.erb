@@ -1,0 +1,8 @@
+
+<li id="<%= dom_id user %>" class="list-group-item d-flex justify-content-between align-items-start">
+  <div class="ms-2 me-auto">
+    <div class="fw-bold"><a href="<%= user_path(user) %>"><%= user.to_s %></a></div>
+    <%= user.details %>
+  </div>
+  <span class="badge text-bg-primary rounded-pill"><%= user.post_count %> Posts</span>
+</li>

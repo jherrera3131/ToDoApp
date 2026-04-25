@@ -1,0 +1,17 @@
+<% content_for :title, "Editing user" %>
+
+
+<div class="card">
+  <div class="card-header">Editing User</div>
+  <div class="card-body">
+    <%= render "form", user: @user %>
+  </div>
+</div>
+
+<br>
+
+<div class="btn-group">
+  <a class="btn btn-primary" href="<%= user_url(@user) %>" role="button">Show User</a>
+  <%= button_to "Delete User", @user, method: :delete, class: "btn btn-danger" %>
+  <a class="btn btn-primary" href="<%= users_url %>" role="button">Back to Users</a>
+</div>

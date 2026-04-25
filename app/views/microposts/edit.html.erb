@@ -1,0 +1,15 @@
+<% content_for :title, "Editing micropost" %>
+
+<div class="card">
+  <div class="card-header">Editing MicroPost</div>
+  <div class="card-body">
+    <%= render "form", micropost: @micropost %>
+  </div>
+</div>
+
+<br>
+
+<div>
+  <a class="btn btn-primary" href="<%= micropost_url(@micropost) %>" role="button">Show Post</a>
+  <a class="btn btn-primary" href="<%= microposts_url %>" role="button">Back to MicroPosts</a>
+</div>

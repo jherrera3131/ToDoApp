@@ -1,0 +1,9 @@
+<% content_for :title, "New user" %>
+
+<div class="card">
+  <div class="card-header">Sign Up to Toy App</div>
+  <div class="card-body">
+    <%= render "form", user: @user %>
+    <p>Existing user? <a href="<%= login_path %>" class="card-link">Sign In</a></p>
+  </div>
+</div>

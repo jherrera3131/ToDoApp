@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Toy App" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag :main %>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="<%= home_page_url %>"><%= image_tag("icon.png", alt:"TOYAPP", :class => "navbar-icon")%>Toy App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="<%= microposts_url %>"><%= bootstrap_icon "folder"%> MicroPosts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="<%= users_url %>"><%= bootstrap_icon "people"%> Users</a>
+            </li>
+    
+            <li class="nav-item">
+              <a class="nav-link" href="<%= contact_page_url %>"><%= bootstrap_icon "telephone"%> Contact Us</a>
+            </li>
+            
+          </ul>
+        </div>
+        <div class="d-flex" role="search">
+        <% if logged_in? %>
+          <a href="<%= user_url(current_user) %>" class="btn btn-outline-success btn-sm"><%= current_user.name %></a>
+          <a href="<%= edit_user_url(current_user) %>" class="btn btn-outline-warning btn-sm">Edit Profile</a>
+          <%= button_to "Log Out", logout_path, method: :delete, class: "btn btn-outline-danger btn-sm" %>
+        <% else %>
+          <a href="<%= login_url %>" class="btn btn-outline-success btn-sm">Log In</a>
+          <a href="<%= signup_url %>" class="btn btn-outline-warning btn-sm">Sign Up</a>
+        <% end %>
+        </div>
+      </div>
+    </nav>
+
+
+    <div class="container-fluid">
+      <%= yield %>
+    </div>
+    
+  </body>
+</html>
