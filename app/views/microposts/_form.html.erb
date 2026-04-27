@@ -17,7 +17,7 @@
 
 
 
-<%= form_for :micropost do |f| %>
+<%= form_with(model: micropost) do |f| %>
 
   <div class="input-group flex-nowrap">
     <span class="input-group-text">Context</span>
@@ -30,6 +30,6 @@
  
   <br>
   <div class="text-center">
-    <button role="button" type="submit" class="btn btn-primary">Create</button>
+    <input class="btn btn-primary" type="submit" value="Submit">
   </div>
 <% end %>

@@ -1,5 +1,6 @@
 class MicropostsController < ApplicationController
   before_action :set_micropost, only: %i[ show edit update destroy ]
+  before_action :set_user_options, only: %i[ new edit create update ]
 
   # GET /microposts or /microposts.json
   def index
@@ -14,12 +15,12 @@ class MicropostsController < ApplicationController
   # GET /microposts/new
   def new
     @micropost = Micropost.new
-    @user_options = User.all.collect { |u| [ u.name, u.id ] }.prepend(["Select User", nil])
+    
   end
 
   # GET /microposts/1/edit
   def edit
-    @user_options = User.all.collect { |u| [ u.name, u.id ] }.prepend(["Select User", nil])
+    
   end
 
   # POST /microposts or /microposts.json
@@ -31,6 +32,7 @@ class MicropostsController < ApplicationController
         format.html { redirect_to @micropost, notice: "Micropost was successfully created." }
         format.json { render :show, status: :created, location: @micropost }
       else
+        
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @micropost.errors, status: :unprocessable_entity }
       end
@@ -64,6 +66,11 @@ class MicropostsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_micropost
       @micropost = Micropost.find(params[:id])
+    end
+
+    # Send existing user data to be used in the dropdown for Micropost.user_id in the form
+    def set_user_options
+      @user_options = User.all.collect { |u| [ u.name, u.id ] }.prepend(["Select User", nil])
     end
 
     # Only allow a list of trusted parameters through.

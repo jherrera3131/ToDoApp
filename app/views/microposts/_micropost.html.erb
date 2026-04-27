@@ -5,6 +5,6 @@
     <p class="card-text"><%= micropost.context %></p>
     <a href="<%= micropost_url(micropost) %>" class="card-link">Show Post</a>
     <a href="<%= edit_micropost_url(micropost) %>" class="card-link">Edit Post</a>
-    <%= button_to "#{bootstrap_icon 'trash'} Delete Post".html_safe, @micropost, method: :delete, class: "btn btn-danger btn-sm" %>
+    <%= button_to "#{bootstrap_icon 'trash'} Delete Post".html_safe, micropost, method: :delete, class: "btn btn-danger btn-sm" %>
   </div>
 </div>
