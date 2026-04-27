@@ -90,9 +90,8 @@ production:
   primary: &primary_production
     <<: *default
     adapter: postgresql
-    database: toy_app_production
-    username: toy_app
-    password: <%= ENV["TOY_APP_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"] %>
+
   cache:
     <<: *primary_production
     database: toy_app_production_cache
