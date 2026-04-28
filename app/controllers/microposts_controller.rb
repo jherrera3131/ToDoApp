@@ -1,6 +1,10 @@
 class MicropostsController < ApplicationController
+  include MicropostsHelper
+
   before_action :set_micropost, only: %i[ show edit update destroy ]
-  before_action :set_user_options, only: %i[ new edit create update ]
+  #before_action :set_user_options, only: %i[ new edit create update ]
+  before_action :require_login, except: %i[ show index ]
+  before_action :check_ownership, only: %i[ edit destroy update ]
 
   # GET /microposts or /microposts.json
   def index
@@ -26,6 +30,7 @@ class MicropostsController < ApplicationController
   # POST /microposts or /microposts.json
   def create
     @micropost = Micropost.new(micropost_params)
+    @micropost.user_id = current_user.id
 
     respond_to do |format|
       if @micropost.save
@@ -68,6 +73,22 @@ class MicropostsController < ApplicationController
       @micropost = Micropost.find(params[:id])
     end
 
+    # Redirect user to the login page before accessing these actions.
+    def require_login
+      unless logged_in?
+        flash[:danger] = 'You need to login or signup to access this feature!'
+        redirect_to login_path
+      end
+    end
+
+    # Redirect user to the login page before accessing these actions.
+    def check_ownership
+      unless owner?(@micropost)
+        flash[:danger] = "You don't have access to this feature!"
+        redirect_to @micropost
+      end
+    end
+
     # Send existing user data to be used in the dropdown for Micropost.user_id in the form
     def set_user_options
       @user_options = User.all.collect { |u| [ u.name, u.id ] }.prepend(["Select User", nil])
@@ -75,6 +96,6 @@ class MicropostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def micropost_params
-      params.require(:micropost).permit(:context, :user_id)
+      params.require(:micropost).permit(:context)
     end
 end

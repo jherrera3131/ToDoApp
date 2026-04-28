@@ -9,7 +9,9 @@
 <div class="card">
   <div class="card-header">
     MICROPOSTS <span class="badge text-bg-secondary"><%= @microposts.count %></span>
-    <a class="btn btn-success btn-sm float-end" href="<%= new_micropost_path %>" role="button"><%= bootstrap_icon "plus-square"%> Create New Post</a>
+    <% if logged_in? %>
+      <a class="btn btn-success btn-sm float-end" href="<%= new_micropost_path %>" role="button"><%= bootstrap_icon "plus-square"%> Create New Post</a>
+    <% end %>
   </div>
   <div class="card-body row" id="microposts">
     <% @microposts.each do |micropost| %>

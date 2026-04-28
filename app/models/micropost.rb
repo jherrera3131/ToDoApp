@@ -8,7 +8,8 @@ class Micropost < ApplicationRecord
 	end
 
 	def by
-		"By #{self.user.name}"
+		user = User.find(user_id)
+		"By #{user.name}"
 	end
 
 end

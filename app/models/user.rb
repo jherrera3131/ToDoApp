@@ -3,7 +3,9 @@ class User < ApplicationRecord
 	before_save {
 		self.email = email.downcase
 	}
-	has_many :microposts
+	
+	has_many :microposts, dependent: :destroy
+
 	validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, 
 			length: { in: 6..20 }, uniqueness: true #{case_sensitive: false}
 	validates :name, presence: true

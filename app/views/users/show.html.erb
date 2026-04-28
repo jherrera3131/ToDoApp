@@ -1,17 +1,28 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @user %>
 
-<div>
-
-  <a href="<%= boost_user_url(@user) %>" class="btn btn-outline-success btn-sm">Boost User</a>
-  <a href="<%= edit_user_url(@user) %>" class="btn btn-outline-warning btn-sm">Edit User</a>
-  <%= button_to "Delete User", @user, method: :delete, class: "btn btn-outline-danger btn-sm" %>
-  <%= button_to "Log Out", logout_path, method: :delete, class: "btn btn-outline-danger btn-sm" %>
+<div class="card">
+  
+  <div class="card-body">
+    <h1 class="display-3"><%= @user.name %></h1>
+    <h1 class="display-6"><%= @user.email %></h1>
+    <p><%= @user.details %></p>
+    <a href="<%= boost_user_url(@user) %>" class="btn btn-outline-success btn-sm">Boost User</a>
+  </div>
 </div>
 
-<div id="microposts">
-  <% @posts.each do |micropost| %>
-    <%= render micropost %>
-  <% end %>
+<div class="card">
+  <div class="card-header">
+    MICROPOSTS <span class="badge text-bg-secondary"><%= @posts.count %></span>
+    <% if logged_in? %>
+      <a class="btn btn-success btn-sm float-end" href="<%= new_micropost_path %>" role="button"><%= bootstrap_icon "plus-square"%> Create New Post</a>
+    <% end %>
+  </div>
+  <div class="card-body row" id="microposts">
+    <% if @posts.any? %>
+      <%= render @posts %>
+    <% else %>
+      <h1>User has not created any posts!</h1>
+    <% end %>
+  </div>
 </div>
