@@ -11,7 +11,6 @@ services:
           name: mysite-db
           property: connectionString
       - key: RAILS_MASTER_KEY
-        value: '79d85fbaf4fb58b67dd5b7b6dda6874c'
         sync: false
       - key: WEB_CONCURRENCY
         value: 2
