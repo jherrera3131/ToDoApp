@@ -1,11 +1,153 @@
-<h1 class="display-1">Welcome to the TOY-APP</h1>
+<% if logged_in? %>
+  <%# ── Dashboard ──────────────────────────────────────────────── %>
+  <div class="mt-3">
+    <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-2">
+      <div>
+        <h1 class="page-title mb-1">
+          <%= bootstrap_icon "pencil", class: "me-2", style: "color:var(--nb-orange)" %>
+          <%= current_user.first_name %>'s Notebook
+        </h1>
+        <p class="mb-0" style="font-family:'Kalam',cursive; color:var(--nb-ring); font-size:0.95rem;">
+          here's what's on your plate today
+        </p>
+      </div>
+      <%= link_to new_todo_path, class: "btn btn-primary" do %>
+        <%= bootstrap_icon "plus-circle", class: "me-1" %> New ToDo
+      <% end %>
+    </div>
 
-<div>
-	<%= get_stats(@user_count,@post_count) %>
-</div>
+    <%# Stat cards %>
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="card stat-card stat-total text-center p-3">
+          <div class="stat-number stat-total"><%= current_user.todos.count %></div>
+          <div class="stat-label">Total ToDos</div>
+          <%= link_to "View All", todos_path, class: "btn btn-outline-primary btn-sm mt-2" %>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card stat-card stat-done text-center p-3">
+          <div class="stat-number stat-done"><%= current_user.todos.completed.count %></div>
+          <div class="stat-label">Completed</div>
+          <%= link_to "View Done", completed_todos_path, class: "btn btn-outline-success btn-sm mt-2" %>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card stat-card stat-cats text-center p-3">
+          <div class="stat-number stat-cats"><%= current_user.categories.count %></div>
+          <div class="stat-label">Categories</div>
+          <%= link_to "Manage", categories_path, class: "btn btn-outline-secondary btn-sm mt-2" %>
+        </div>
+      </div>
+    </div>
 
-<h2 class="stats">TOTAL USERS: <%= @user_count %> </h2>
-<h1 class="stats">TOTAL POSTS: <%= @post_count %> </h1>
+    <%# Recent pending todos on notebook page %>
+    <% recent_todos = current_user.todos.incomplete.order(created_at: :desc).limit(8) %>
+    <% if recent_todos.any? %>
+      <div class="notebook-page">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <div class="nb-section-label">
+              <%= bootstrap_icon "clock-history", class: "me-1" %>Recent Pending
+            </div>
+            <h4 class="mb-0" style="font-family:'Playfair Display',serif; color:var(--nb-brown);">
+              Up Next
+            </h4>
+          </div>
+          <%= link_to todos_path, class: "btn btn-outline-secondary btn-sm" do %>
+            See all <%= bootstrap_icon "arrow-right", class: "ms-1" %>
+          <% end %>
+        </div>
 
+        <% recent_todos.each do |todo| %>
+          <a href="<%= todo_path(todo) %>" style="text-decoration:none; color:inherit;">
+            <div class="todo-item <%= todo.priority? ? "todo-priority" : "" %>">
+              <div class="nb-check <%= todo.priority? ? "priority-mark" : "" %>">
+                <% if todo.priority? %>
+                  <%= bootstrap_icon "exclamation" %>
+                <% end %>
+              </div>
+              <span class="todo-title" style="font-family:'Kalam',cursive;">
+                <%= todo.title %>
+              </span>
+              <% if todo.priority? %>
+                <span class="priority-badge">Priority</span>
+              <% end %>
+              <span class="todo-cat-tag">
+                <%= bootstrap_icon "folder", class: "me-1" %><%= todo.category.name %>
+              </span>
+            </div>
+          </a>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="notebook-page text-center py-4">
+        <p style="font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--nb-ring);">
+          <%= bootstrap_icon "check2-all", class: "me-2" %>All caught up! No pending tasks.
+        </p>
+        <%= link_to new_todo_path, class: "btn btn-primary mt-2" do %>
+          <%= bootstrap_icon "plus-circle", class: "me-1" %> Add a ToDo
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 
-<%= bootstrap_icon "alarm"%>
+<% else %>
+  <%# ── Landing / Guest ──────────────────────────────────────── %>
+  <div class="row justify-content-center mt-3">
+    <div class="col-lg-9">
+      <div class="hero-section text-center">
+        <div class="hero-since mb-2">since <%= Time.now.year %> &middot; your personal notebook</div>
+        <div class="hero-brand">To Do App</div>
+        <p class="hero-tagline mt-3 mb-4">
+          where you can get all the work you need to do<br>
+          mapped and out the way.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <%= link_to signup_path, class: "btn btn-primary btn-lg px-5" do %>
+            <%= bootstrap_icon "person-plus", class: "me-2" %>Get Started
+          <% end %>
+          <%= link_to login_path, class: "btn btn-secondary btn-lg px-5" do %>
+            <%= bootstrap_icon "box-arrow-in-right", class: "me-2" %>Log In
+          <% end %>
+        </div>
+
+        <div class="row g-4 mt-4">
+          <div class="col-md-4">
+            <div class="card feature-card border-0 h-100">
+              <div class="card-body text-center py-4">
+                <%= bootstrap_icon "list-check", class: "display-5 mb-2", style: "color:var(--nb-orange)" %>
+                <h5 style="font-family:'Playfair Display',serif;">Organize Tasks</h5>
+                <p style="font-family:'Kalam',cursive; color:var(--nb-ring); font-size:0.95rem;">
+                  Create and manage to-dos with priority flags and custom categories.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card border-0 h-100">
+              <div class="card-body text-center py-4">
+                <%= bootstrap_icon "folder2-open", class: "display-5 mb-2", style: "color:var(--nb-olive)" %>
+                <h5 style="font-family:'Playfair Display',serif;">Categorize</h5>
+                <p style="font-family:'Kalam',cursive; color:var(--nb-ring); font-size:0.95rem;">
+                  Group your tasks into categories for clean, effortless management.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card border-0 h-100">
+              <div class="card-body text-center py-4">
+                <%= bootstrap_icon "shield-lock", class: "display-5 mb-2", style: "color:var(--nb-blue)" %>
+                <h5 style="font-family:'Playfair Display',serif;">Private & Yours</h5>
+                <p style="font-family:'Kalam',cursive; color:var(--nb-ring); font-size:0.95rem;">
+                  Your notebook is private &mdash; only you can see and manage your tasks.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

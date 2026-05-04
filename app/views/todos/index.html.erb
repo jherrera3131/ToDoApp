@@ -1,0 +1,79 @@
+<% content_for(:title) { "My ToDos" } %>
+
+<div class="mt-3">
+  <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+    <h1 class="page-title">
+      <%= bootstrap_icon "list-check", class: "me-2", style: "color:var(--nb-orange)" %>My ToDos
+    </h1>
+    <%= link_to new_todo_path, class: "btn btn-primary" do %>
+      <%= bootstrap_icon "plus-circle", class: "me-1" %> New ToDo
+    <% end %>
+  </div>
+
+  <div class="notebook-page">
+    <% if @todos.empty? %>
+      <div class="text-center py-4">
+        <p style="font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--nb-ring);">
+          <%= bootstrap_icon "journal-plus", class: "me-2" %>Your notebook is empty.
+        </p>
+        <%= link_to "Write your first task", new_todo_path, class: "btn btn-primary mt-1" %>
+      </div>
+    <% else %>
+      <div class="nb-section-label mb-2">
+        <%= @todos.count %> task<%= @todos.count == 1 ? "" : "s" %> in your notebook
+      </div>
+      <% @todos.each do |todo| %>
+        <div class="todo-item
+          <%= todo.completed? ? "todo-completed" : "" %>
+          <%= todo.priority? && !todo.completed? ? "todo-priority" : "" %>">
+
+          <%# Ink checkbox %>
+          <div class="nb-check <%= todo.completed? ? "checked" : "" %> <%= todo.priority? && !todo.completed? ? "priority-mark" : "" %>">
+            <% if todo.completed? %>
+              <%= bootstrap_icon "check" %>
+            <% elsif todo.priority? %>
+              <%= bootstrap_icon "exclamation" %>
+            <% end %>
+          </div>
+
+          <%# Title with animated strikethrough %>
+          <span class="todo-title">
+            <%= todo.title %>
+          </span>
+
+          <%# Status badges %>
+          <% if todo.priority? && !todo.completed? %>
+            <span class="priority-badge d-none d-sm-inline">
+              <%= bootstrap_icon "exclamation-circle-fill", class: "me-1" %>Priority
+            </span>
+          <% end %>
+          <% if todo.completed? %>
+            <span class="done-badge d-none d-sm-inline">
+              <%= bootstrap_icon "check-circle-fill", class: "me-1" %>Done
+            </span>
+          <% end %>
+
+          <%# Category tag %>
+          <span class="todo-cat-tag">
+            <%= bootstrap_icon "folder", class: "me-1" %><%= todo.category.name %>
+          </span>
+
+          <%# Action buttons %>
+          <div class="todo-actions">
+            <%= link_to todo_path(todo), class: "btn btn-sm btn-outline-primary" do %>
+              <%= bootstrap_icon "eye" %>
+            <% end %>
+            <%= link_to edit_todo_path(todo), class: "btn btn-sm btn-outline-warning" do %>
+              <%= bootstrap_icon "pencil" %>
+            <% end %>
+            <%= button_to todo_path(todo), method: :delete,
+                  class: "btn btn-sm btn-outline-danger",
+                  data: { turbo_confirm: "Delete \"#{todo.title}\"?" } do %>
+              <%= bootstrap_icon "trash" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

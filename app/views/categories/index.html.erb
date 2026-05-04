@@ -1,0 +1,61 @@
+<% content_for(:title) { "Categories" } %>
+
+<div class="mt-3">
+  <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+    <h1 class="page-title">
+      <%= bootstrap_icon "folder2-open", class: "me-2", style: "color:var(--nb-orange)" %>Categories
+    </h1>
+    <%= link_to new_category_path, class: "btn btn-primary" do %>
+      <%= bootstrap_icon "folder-plus", class: "me-1" %> New Category
+    <% end %>
+  </div>
+
+  <% if @categories.empty? %>
+    <div class="notebook-page text-center py-4">
+      <p style="font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--nb-ring);">
+        <%= bootstrap_icon "folder-x", class: "me-2" %>No folders yet.
+      </p>
+      <%= link_to "Create your first category", new_category_path, class: "btn btn-primary mt-1" %>
+    </div>
+  <% else %>
+    <div class="nb-section-label mb-3">
+      <%= @categories.count %> categor<%= @categories.count == 1 ? "y" : "ies" %> in your notebook
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <% @categories.each do |category| %>
+        <div class="col">
+          <div class="card category-card h-100">
+            <div class="card-body pt-4">
+              <h5 class="card-title">
+                <%= bootstrap_icon "folder2-open", class: "me-1", style: "color:var(--nb-orange)" %>
+                <%= link_to category.name, category_path(category) %>
+              </h5>
+              <% if category.description.present? %>
+                <p style="font-family:'Kalam',cursive; color:var(--nb-ring); font-size:0.92rem; margin-bottom:0.75rem;">
+                  <%= truncate(category.description, length: 90) %>
+                </p>
+              <% end %>
+              <span class="cat-count-badge">
+                <%= bootstrap_icon "list-check", class: "me-1" %>
+                <%= category.todos.count %> ToDo<%= category.todos.count == 1 ? "" : "s" %>
+              </span>
+            </div>
+            <div class="card-footer d-flex gap-2">
+              <%= link_to category_path(category), class: "btn btn-sm btn-outline-primary" do %>
+                <%= bootstrap_icon "eye" %> View
+              <% end %>
+              <%= link_to edit_category_path(category), class: "btn btn-sm btn-outline-warning" do %>
+                <%= bootstrap_icon "pencil" %> Edit
+              <% end %>
+              <%= button_to category_path(category), method: :delete,
+                    class: "btn btn-sm btn-outline-danger",
+                    data: { turbo_confirm: "Delete \"#{category.name}\" and all its ToDos?" } do %>
+                <%= bootstrap_icon "trash" %> Delete
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

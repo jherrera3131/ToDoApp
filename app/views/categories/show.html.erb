@@ -1,0 +1,100 @@
+<% content_for(:title) { @category.name } %>
+
+<div class="mt-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "Categories", categories_path %></li>
+      <li class="breadcrumb-item active"><%= @category.name %></li>
+    </ol>
+  </nav>
+
+  <%# Category detail card %>
+  <div class="nb-detail-card mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+      <div>
+        <div class="nb-section-label mb-1">
+          <%= bootstrap_icon "folder2-open", class: "me-1" %>category
+        </div>
+        <h1 class="nb-detail-title mb-1"><%= @category.name %></h1>
+        <% if @category.description.present? %>
+          <p style="font-family:'Kalam',cursive; color:var(--nb-brown-mid); font-size:1rem; margin-bottom:0.5rem;">
+            <%= @category.description %>
+          </p>
+        <% end %>
+        <small style="font-family:'Lato',sans-serif; font-size:0.75rem; color:var(--nb-ring);">
+          Created <%= @category.created_at.strftime("%B %d, %Y") %>
+        </small>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <%= link_to edit_category_path(@category), class: "btn btn-warning btn-sm" do %>
+          <%= bootstrap_icon "pencil-square", class: "me-1" %> Edit
+        <% end %>
+        <%= button_to category_path(@category), method: :delete, class: "btn btn-danger btn-sm",
+              data: { turbo_confirm: "Delete \"#{@category.name}\" and ALL its ToDos?" } do %>
+          <%= bootstrap_icon "trash", class: "me-1" %> Delete
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# Todos in this category %>
+  <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+    <div>
+      <div class="nb-section-label">
+        <%= bootstrap_icon "list-check", class: "me-1" %>tasks in this folder
+      </div>
+      <h4 style="font-family:'Playfair Display',serif; color:var(--nb-brown); margin:0;">
+        ToDos
+        <span class="cat-count-badge ms-2"><%= @todos.count %></span>
+      </h4>
+    </div>
+    <%= link_to new_todo_path(category_id: @category.id), class: "btn btn-primary btn-sm" do %>
+      <%= bootstrap_icon "plus-circle", class: "me-1" %> Add ToDo
+    <% end %>
+  </div>
+
+  <div class="notebook-page">
+    <% if @todos.empty? %>
+      <div class="text-center py-4">
+        <p style="font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--nb-ring);">
+          <%= bootstrap_icon "journal-plus", class: "me-2" %>This folder is empty.
+        </p>
+        <%= link_to "Add the first task", new_todo_path(category_id: @category.id), class: "btn btn-primary btn-sm mt-1" %>
+      </div>
+    <% else %>
+      <% @todos.each do |todo| %>
+        <div class="todo-item
+          <%= todo.completed? ? "todo-completed" : "" %>
+          <%= todo.priority? && !todo.completed? ? "todo-priority" : "" %>">
+
+          <div class="nb-check <%= todo.completed? ? "checked" : "" %> <%= todo.priority? && !todo.completed? ? "priority-mark" : "" %>">
+            <% if todo.completed? %>
+              <%= bootstrap_icon "check" %>
+            <% elsif todo.priority? %>
+              <%= bootstrap_icon "exclamation" %>
+            <% end %>
+          </div>
+
+          <span class="todo-title"><%= todo.title %></span>
+
+          <% if todo.priority? && !todo.completed? %>
+            <span class="priority-badge d-none d-sm-inline">
+              <%= bootstrap_icon "exclamation-circle-fill", class: "me-1" %>Priority
+            </span>
+          <% end %>
+          <% if todo.completed? %>
+            <span class="done-badge d-none d-sm-inline">
+              <%= bootstrap_icon "check-circle-fill", class: "me-1" %>Done
+            </span>
+          <% end %>
+
+          <div class="todo-actions">
+            <%= link_to todo_path(todo), class: "btn btn-sm btn-outline-primary" do %>
+              <%= bootstrap_icon "arrow-right-circle" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

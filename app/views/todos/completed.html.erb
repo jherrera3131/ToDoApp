@@ -1,0 +1,61 @@
+<% content_for(:title) { "Completed ToDos" } %>
+
+<div class="mt-3">
+  <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+    <h1 class="page-title" style="color:var(--nb-olive);">
+      <%= bootstrap_icon "check2-all", class: "me-2" %>Completed
+    </h1>
+    <%= link_to todos_path, class: "btn btn-outline-secondary" do %>
+      <%= bootstrap_icon "arrow-left", class: "me-1" %> All ToDos
+    <% end %>
+  </div>
+
+  <div class="notebook-page">
+    <% if @todos.empty? %>
+      <div class="text-center py-4">
+        <p style="font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--nb-ring);">
+          <%= bootstrap_icon "hourglass", class: "me-2" %>Nothing crossed off yet — keep going!
+        </p>
+        <%= link_to "View all ToDos", todos_path, class: "btn btn-outline-secondary mt-1" %>
+      </div>
+    <% else %>
+      <div class="nb-section-label mb-2">
+        <%= @todos.count %> completed task<%= @todos.count == 1 ? "" : "s" %> &mdash; well done!
+      </div>
+      <% @todos.each do |todo| %>
+        <div class="todo-item todo-completed">
+
+          <div class="nb-check checked">
+            <%= bootstrap_icon "check" %>
+          </div>
+
+          <span class="todo-title">
+            <%= todo.title %>
+          </span>
+
+          <span class="done-badge d-none d-sm-inline">
+            <%= bootstrap_icon "check-circle-fill", class: "me-1" %>Done
+          </span>
+
+          <span class="todo-cat-tag">
+            <%= bootstrap_icon "folder", class: "me-1" %><%= todo.category.name %>
+          </span>
+
+          <div class="todo-actions">
+            <%= link_to todo_path(todo), class: "btn btn-sm btn-outline-primary" do %>
+              <%= bootstrap_icon "eye" %>
+            <% end %>
+            <%= link_to edit_todo_path(todo), class: "btn btn-sm btn-outline-warning" do %>
+              <%= bootstrap_icon "pencil" %>
+            <% end %>
+            <%= button_to todo_path(todo), method: :delete,
+                  class: "btn btn-sm btn-outline-danger",
+                  data: { turbo_confirm: "Delete \"#{todo.title}\"?" } do %>
+              <%= bootstrap_icon "trash" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

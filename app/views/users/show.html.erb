@@ -1,28 +1,40 @@
-<p style="color: green"><%= notice %></p>
+<% content_for(:title) { @user.full_name } %>
 
+<div class="mt-3">
+  <div class="nb-profile-card">
+    <div class="d-flex align-items-center gap-4 flex-wrap">
+      <div class="user-avatar">
+        <%= bootstrap_icon "person-circle", class: "display-3" %>
+      </div>
+      <div>
+        <div class="nb-section-label mb-1">
+          <%= bootstrap_icon "person", class: "me-1" %>profile
+        </div>
+        <h2 style="font-family:'Playfair Display',serif; margin-bottom:0.15rem;">
+          <%= @user.full_name %>
+        </h2>
+        <p style="font-family:'Kalam',cursive; color:var(--nb-ring); margin-bottom:0.1rem;">
+          @<%= @user.username %>
+        </p>
+        <p style="font-family:'Lato',sans-serif; font-size:0.82rem; color:var(--nb-brown-mid); margin-bottom:0.1rem;">
+          <%= @user.email %>
+        </p>
+        <small style="font-family:'Lato',sans-serif; font-size:0.78rem; color:var(--nb-ring);">
+          <%= @user.details %>
+        </small>
+      </div>
+    </div>
 
-<div class="card">
-  
-  <div class="card-body">
-    <h1 class="display-3"><%= @user.name %></h1>
-    <h1 class="display-6"><%= @user.email %></h1>
-    <p><%= @user.details %></p>
-    <a href="<%= boost_user_url(@user) %>" class="btn btn-outline-success btn-sm">Boost User</a>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-header">
-    MICROPOSTS <span class="badge text-bg-secondary"><%= @posts.count %></span>
-    <% if logged_in? %>
-      <a class="btn btn-success btn-sm float-end" href="<%= new_micropost_path %>" role="button"><%= bootstrap_icon "plus-square"%> Create New Post</a>
-    <% end %>
-  </div>
-  <div class="card-body row" id="microposts">
-    <% if @posts.any? %>
-      <%= render @posts %>
-    <% else %>
-      <h1>User has not created any posts!</h1>
+    <% if logged_in? && current_user == @user %>
+      <div class="d-flex gap-2 mt-4 flex-wrap">
+        <%= link_to edit_user_path(@user), class: "btn btn-warning btn-sm" do %>
+          <%= bootstrap_icon "pencil-square", class: "me-1" %> Edit Profile
+        <% end %>
+        <%= button_to user_path(@user), method: :delete, class: "btn btn-danger btn-sm",
+              data: { turbo_confirm: "Are you sure? This will permanently delete your account, all ToDos, and all Categories." } do %>
+          <%= bootstrap_icon "person-x", class: "me-1" %> Delete Account
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>

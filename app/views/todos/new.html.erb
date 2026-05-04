@@ -1,0 +1,33 @@
+<% content_for(:title) { "New ToDo" } %>
+
+<div class="mt-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "ToDos", todos_path %></li>
+      <li class="breadcrumb-item active">New ToDo</li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="nb-form-page">
+        <div class="nb-section-label mb-1">
+          <%= bootstrap_icon "pencil", class: "me-1" %>new entry
+        </div>
+        <h2 style="font-family:'Playfair Display',serif; color:var(--nb-brown); margin-bottom:1.5rem;">
+          Write a ToDo
+        </h2>
+
+        <% if current_user.categories.empty? %>
+          <div class="alert alert-warning">
+            <%= bootstrap_icon "exclamation-triangle", class: "me-1" %>
+            You need at least one category before adding a task.
+            <%= link_to "Create a category first.", new_category_path, style: "color:var(--nb-orange);" %>
+          </div>
+        <% else %>
+          <%= render "form", todo: @todo %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

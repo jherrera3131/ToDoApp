@@ -1,9 +1,28 @@
-<% content_for :title, "New user" %>
+<% content_for(:title) { "Sign Up" } %>
 
-<div class="card">
-  <div class="card-header">Sign Up to Toy App</div>
-  <div class="card-body">
-    <%= render "form", user: @user %>
-    <p>Existing user? <a href="<%= login_path %>" class="card-link">Sign In</a></p>
+<div class="row justify-content-center mt-4">
+  <div class="col-md-6 col-lg-5">
+    <div class="text-center mb-3">
+      <div style="font-family:'Lobster Two',cursive; font-size:2.8rem; color:var(--nb-orange); text-shadow:2px 2px 0 rgba(196,99,42,0.2);">
+        To Do App
+      </div>
+      <p style="font-family:'Kalam',cursive; color:var(--nb-ring); font-size:0.95rem;">
+        start your first notebook
+      </p>
+    </div>
+
+    <div class="nb-form-page">
+      <div class="nb-section-label mb-1">
+        <%= bootstrap_icon "person-plus", class: "me-1" %>new account
+      </div>
+      <h2 style="font-family:'Playfair Display',serif; color:var(--nb-brown); margin-bottom:1.5rem;">
+        Create Your Account
+      </h2>
+      <%= render "form", user: @user %>
+      <hr style="border-color:var(--nb-line); margin: 1.5rem 0;">
+      <p class="text-center mb-0" style="font-family:'Kalam',cursive; color:var(--nb-brown-mid);">
+        Already have a notebook? <%= link_to "Log in", login_path, style: "color:var(--nb-orange);" %>
+      </p>
+    </div>
   </div>
 </div>

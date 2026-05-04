@@ -1,23 +1,24 @@
-<% content_for(:title) { "Edit Profile" } %>
+<% content_for(:title) { "Edit ToDo" } %>
 
 <div class="mt-3">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><%= link_to "Profile", user_path(current_user) %></li>
+      <li class="breadcrumb-item"><%= link_to "ToDos", todos_path %></li>
+      <li class="breadcrumb-item"><%= link_to truncate(@todo.title, length: 30), todo_path(@todo) %></li>
       <li class="breadcrumb-item active">Edit</li>
     </ol>
   </nav>
 
   <div class="row justify-content-center">
-    <div class="col-lg-6">
+    <div class="col-lg-7">
       <div class="nb-form-page">
         <div class="nb-section-label mb-1">
-          <%= bootstrap_icon "pencil-square", class: "me-1" %>editing profile
+          <%= bootstrap_icon "pencil-square", class: "me-1" %>editing entry
         </div>
         <h2 style="font-family:'Playfair Display',serif; color:var(--nb-brown); margin-bottom:1.5rem;">
-          Update Your Details
+          Revise Your ToDo
         </h2>
-        <%= render "form", user: @user %>
+        <%= render "form", todo: @todo %>
       </div>
     </div>
   </div>
