@@ -6,28 +6,28 @@ class MicropostsController < ApplicationController
   before_action :require_login, except: %i[ show index ]
   before_action :check_ownership, only: %i[ edit destroy update ]
 
-  # GET /microposts or /microposts.json
+  #index
   def index
     @microposts = Micropost.includes(:user).all
   end
 
-  # GET /microposts/1 or /microposts/1.json
+  #show
   def show
     @name = @micropost.user.name
   end
 
-  # GET /microposts/new
+  #new
   def new
     @micropost = Micropost.new
-    
+
   end
 
-  # GET /microposts/1/edit
+  #edit
   def edit
-    
+
   end
 
-  # POST /microposts or /microposts.json
+  #create
   def create
     @micropost = Micropost.new(micropost_params)
     @micropost.user_id = current_user.id
@@ -44,7 +44,7 @@ class MicropostsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /microposts/1 or /microposts/1.json
+  #update
   def update
     respond_to do |format|
       if @micropost.update(micropost_params)
@@ -57,7 +57,7 @@ class MicropostsController < ApplicationController
     end
   end
 
-  # DELETE /microposts/1 or /microposts/1.json
+  #destroy
   def destroy
     @micropost.destroy!
 
@@ -68,12 +68,12 @@ class MicropostsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    #shared setup
     def set_micropost
       @micropost = Micropost.find(params[:id])
     end
 
-    # Redirect user to the login page before accessing these actions.
+    #login gate
     def require_login
       unless logged_in?
         flash[:danger] = 'You need to login or signup to access this feature!'
@@ -81,7 +81,7 @@ class MicropostsController < ApplicationController
       end
     end
 
-    # Redirect user to the login page before accessing these actions.
+    #ownership gate
     def check_ownership
       unless owner?(@micropost)
         flash[:danger] = "You don't have access to this feature!"
@@ -89,12 +89,12 @@ class MicropostsController < ApplicationController
       end
     end
 
-    # Send existing user data to be used in the dropdown for Micropost.user_id in the form
+    #user dropdown options
     def set_user_options
       @user_options = User.all.collect { |u| [ u.name, u.id ] }.prepend(["Select User", nil])
     end
 
-    # Only allow a list of trusted parameters through.
+    #strong paramter list
     def micropost_params
       params.require(:micropost).permit(:context)
     end

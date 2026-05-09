@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(email: session_params[:email].downcase)
     if user && user.authenticate(session_params[:password])
-      # Log the user in and redirect to the user's show page.
+      #log in then go to profile
       reset_session
       log_in(user)
       
@@ -28,7 +28,7 @@ class SessionsController < ApplicationController
 
   private
 
-    # Only allow a list of trusted parameters through.
+    #strong params
     def session_params
       params.require(:session).permit(:email, :password)
     end
